@@ -107,7 +107,9 @@ do {
                             $profileFiles = Get-ChildItem -Path $profilePath -File -Recurse -ErrorAction Stop
                             $newestFile = $profileFiles | Sort-Object LastWriteTime -Descending | Select-Object -First 1
                             $ageDays = (New-TimeSpan -Start $newestFile.LastWriteTime -End (Get-Date)).Days
-                            $userAges += [ordered]@{ Profile = $profilePath; Age = $ageDays }
+                            # Store profile information as a PSCustomObject so
+                            # that it exposes properties we can access later
+                            $userAges += [PSCustomObject]@{ Profile = $profilePath; Age = $ageDays }
                         }
                         catch {
                             continue
